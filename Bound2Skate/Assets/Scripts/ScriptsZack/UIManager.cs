@@ -7,8 +7,6 @@ public class UIManager : MonoBehaviour
 {
     public Button DestroyTrashButton1;
     public Button DestroyTrashButton2;
-
-    public Text MoneyDisplayer;
     private void Start()
     {
         DestroyTrashButton1.onClick.AddListener(Paramater1);
@@ -17,7 +15,7 @@ public class UIManager : MonoBehaviour
     }
     public void Paramater1() 
     {
-        if (GameManager.money >= 250)
+        if (GameManager.money >= 250 && !Kys.Bought1)
         {
             Kys.Bought1 = true;
 
@@ -27,17 +25,12 @@ public class UIManager : MonoBehaviour
 
     public void Paramater2()
     {
-        if (GameManager.money >= 300)
+        if (GameManager.money >= 300 && !Kys2.Bought2)
         {
             Kys2.Bought2 = true;
 
             GameManager.money -= 300;
         }
-    }
-
-    void Update()
-    {
-        MoneyDisplayer.text = "Money: " + GameManager.money;
     }
 
 }
