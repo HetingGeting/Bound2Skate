@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public static bool Spawned3;
     void Start()
     {
-        TutorialPanel.SetActive(true);
+        //TutorialPanel.SetActive(true);
         money = 600;
     }
 

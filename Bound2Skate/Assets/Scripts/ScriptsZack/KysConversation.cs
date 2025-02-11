@@ -7,7 +7,7 @@ public class KysConversation : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Race && transform.position == new Vector3(-3.1500001f, 1.82000005f, -17.5699997f)) 
+        if (GameManager.Race && transform.position == new Vector3(1.59000003f, 1.56470001f, -17.3400002f)) 
         {
             Destroy(gameObject);
         }
