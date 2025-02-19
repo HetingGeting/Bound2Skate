@@ -50,7 +50,6 @@ public class TempTextWriterScript : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(textWriterSingleList.Count);
         for (int i = 0; i < textWriterSingleList.Count; i++) 
         {
             bool destroyInstance = textWriterSingleList[i].Update();

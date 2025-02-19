@@ -12,6 +12,10 @@ public class TempTextScript : MonoBehaviour
     private TempTextWriterScript.TextWriterSingle textWriterSingle;
     private AudioSource talkingAudioSource;
     private Text OutlineText;
+    public GameObject TutorialPanel;
+
+
+    int i = 0;
     private void Awake()
     {
         OutlineText = transform.Find("TutorialPanel").Find("OutlineText").GetComponent<Text>();
@@ -22,26 +26,37 @@ public class TempTextScript : MonoBehaviour
     void Start()
     {
         textbutton.onClick.AddListener(DifferentTexts);
+        DifferentTexts();
     }
 
     public void DifferentTexts() 
     {
         if (textWriterSingle != null && textWriterSingle.IsActive()) 
         { //Currently active textwriter
-            textWriterSingle.WriteAllAnddestroy();
+            // textWriterSingle.WriteAllAnddestroy();
         } else {
         string[] messageArray = new string[] {
-                "I found this cool skatepark that seems to be abandoned",
                 "Skate around by pressing WASD",
                 "Try to do a trick by jumping with space and pressing A or D in the Air",
-                "WOW! you did a kickflip! different tricks give different scores",
-                "Try to get a score of 500!"
-
+                "You can build a combo by doing multiple tricks in a row",
+                "Go and talk to Alex to start a Race"
         };
-        string message = messageArray[UnityEngine.Random.Range(0,messageArray.Length)];
-            StartTalkingSound();
-        textWriterSingle = TempTextWriterScript.AddWriter_Static(text, message, .1f, true, true, StopTalkingSound);
-        textWriterSingle = TempTextWriterScript.AddWriter_Static(OutlineText, message, .1f, true, true, StopTalkingSound);
+            if(i >= 3) 
+            {
+                TutorialPanel.SetActive(false);
+                StopTalkingSound();
+            }
+            else 
+            {
+                string message = messageArray[i];
+                StartTalkingSound();
+                textWriterSingle = TempTextWriterScript.AddWriter_Static(text, message, .05f, true, true, StopTalkingSound);
+                textWriterSingle = TempTextWriterScript.AddWriter_Static(OutlineText, message, .05f, true, true, StopTalkingSound);
+
+                i++;
+
+            }
+
         }
     }
 

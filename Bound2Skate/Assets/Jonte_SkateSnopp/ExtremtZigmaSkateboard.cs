@@ -6,8 +6,22 @@ public class ExtremtZigmaSkateboard : MonoBehaviour
 {
     private float horizontalInput, verticalInput;
     private float currentSteerAngle, currentbreakForce;
-    private bool isBreaking;
+    public static bool isBreaking;
     public Animator weezyfBabyAnim;
+    private Rigidbody rb;
+
+    public float playerHeight;
+    public LayerMask whatIsGround;
+    public LayerMask ConversationGround;
+    public bool grounded;
+    public float jumpForce;
+    public float jumpCooldown;
+    bool ReadyToJump = true;
+
+    public static bool conversationgrounded;
+
+    bool animationActive;
+    int KickflipAnimationTimer = 1;
 
     // Settings
     [SerializeField] private float motorForce, breakForce, maxSteerAngle;
@@ -20,6 +34,10 @@ public class ExtremtZigmaSkateboard : MonoBehaviour
     [SerializeField] private Transform frontLeftWheelTransform, frontRightWheelTransform;
     [SerializeField] private Transform rearLeftWheelTransform, rearRightWheelTransform;
 
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
     private void FixedUpdate()
     {
         GetInput();
@@ -30,6 +48,11 @@ public class ExtremtZigmaSkateboard : MonoBehaviour
 
     private void Update()
     {
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
+
+
+        conversationgrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, ConversationGround);
+
         if (Input.GetKey(KeyCode.W))
         {
             weezyfBabyAnim.SetBool("IsSkating", true);
@@ -37,6 +60,26 @@ public class ExtremtZigmaSkateboard : MonoBehaviour
         else
         {
             weezyfBabyAnim.SetBool("IsSkating", false);
+        }
+
+        if (Input.GetKey(KeyCode.Space) && ReadyToJump && grounded)
+        {
+            ReadyToJump = false;
+
+            Jump();
+
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
+
+        if(conversationgrounded) 
+        {
+            GameManager.Talking = true;
+        }
+
+        if (!grounded && !animationActive && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))) 
+        {
+            GameManager.Kickflip = true;
+            Animation();
         }
     }
 
@@ -47,9 +90,6 @@ public class ExtremtZigmaSkateboard : MonoBehaviour
 
         // Acceleration Input
         verticalInput = Input.GetAxis("Vertical");
-
-        // Breaking Input
-        isBreaking = Input.GetKey(KeyCode.Space);
     }
 
     private void HandleMotor()
@@ -67,6 +107,7 @@ public class ExtremtZigmaSkateboard : MonoBehaviour
         rearLeftWheelCollider.brakeTorque = currentbreakForce;
         rearRightWheelCollider.brakeTorque = currentbreakForce;
     }
+    
 
     private void HandleSteering()
     {
@@ -85,10 +126,32 @@ public class ExtremtZigmaSkateboard : MonoBehaviour
 
     private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform)
     {
+        wheelTransform.rotation = Quaternion.identity;
         Vector3 pos;
         Quaternion rot;
         wheelCollider.GetWorldPose(out pos, out rot);
         wheelTransform.rotation = rot;
         wheelTransform.position = pos;
+    }
+    private void Jump()
+    {
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+    }
+    private void ResetJump()
+    {
+        ReadyToJump = true;
+    }
+
+    void Animation() 
+    {
+        animationActive = true;
+        Invoke(nameof(AnimationSetActive), KickflipAnimationTimer);
+    }
+
+    void AnimationSetActive() 
+    {
+        animationActive = false;
     }
 }

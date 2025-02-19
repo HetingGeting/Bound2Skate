@@ -7,6 +7,8 @@ TagManager:
   - New tag
   - MoneyMenuButton
   - RaceUIPanel
+  - TrickPanel
+  - Trickpanel
   layers:
   - Default
   - TransparentFX
@@ -15,7 +17,7 @@ TagManager:
   - Water
   - UI
   - WhatIsGround
-  - 
+  - ConversationGround
   - 
   - 
   - 

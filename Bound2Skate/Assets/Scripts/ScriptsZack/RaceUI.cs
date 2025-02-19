@@ -7,11 +7,12 @@ using UnityEngine.UI;
 public class RaceUI : MonoBehaviour
 {
     public float totalTime = 180;
-    public float CountdownTime = 5;
+    public static float CountdownTime = 5;
     float CountdownSeconds;
     public Text TimerText;
+    public Text TimerTextOutline;
     public Text CountdownText;
-
+    public GameObject[] RaceTimerPanel;
 
 
     void Update()
@@ -27,7 +28,8 @@ public class RaceUI : MonoBehaviour
         else
         {
             CountdownText.text = "";
-
+            RaceTimerPanel[0].SetActive(true);
+            RaceTimerPanel[1].SetActive(true);
             if (totalTime > 0)
             {
                 
@@ -37,11 +39,15 @@ public class RaceUI : MonoBehaviour
 
 
                 TimerText.text = string.Format("{0:00} : {1:00}", Minutes, Seconds);
+                TimerTextOutline.text = string.Format("{0:00} : {1:00}", Minutes, Seconds);
             }
             else
             {
                 totalTime = 0;
                 GameManager.Race = false;
+                RaceTimerPanel[0].SetActive(false);
+                RaceTimerPanel[1].SetActive(false);
+
             }
         }
     }

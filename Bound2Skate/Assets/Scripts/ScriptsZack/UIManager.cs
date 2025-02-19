@@ -25,11 +25,11 @@ public class UIManager : MonoBehaviour
 
     public void Paramater2()
     {
-        if (GameManager.money >= 300 && !Kys2.Bought2)
+        if (GameManager.money >= 350 && !Kys2.Bought2)
         {
             Kys2.Bought2 = true;
 
-            GameManager.money -= 300;
+            GameManager.money -= 350;
         }
     }
 
